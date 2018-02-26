@@ -1,3 +1,4 @@
 venv/*
 .bash_history
 *.png
+__pycache__
