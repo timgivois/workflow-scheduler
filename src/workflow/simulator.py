@@ -1,4 +1,3 @@
-from workflow.workflow import Workflow
 from itertools import accumulate
 from math import floor
 from random import choice, sample, randint
