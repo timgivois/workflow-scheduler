@@ -1,7 +1,10 @@
 from workflow.workflow import Workflow
 from itertools import accumulate
 from math import floor
-from random import choice, sample
+from random import choice, sample, randint
+
+MAX_INSTRUCTIONS = 1800
+MIN_INSTRUCTIONS = 200
 
 class Simulator:
     def __init__(self, vertex_number, layers_distribution, dependency_distribution):
@@ -16,6 +19,7 @@ class Simulator:
 
         self.add_start_and_stop()
         self.create_connections()
+        self.simulate_weights()
 
 
     def layers_adjusted(self, layers, vertex_number):
@@ -105,5 +109,10 @@ class Simulator:
     def is_connected(self, source, target):
         return target in self.edges['source'].get(source, [])
 
+    def simulate_weights(self):
+        self.weights = [0]
+        for i in range(1, self.size-1):
+            self.weights.append(randint(MIN_INSTRUCTIONS, MAX_INSTRUCTIONS))
+        self.weights.append(0)
 
-w = Simulator(50, [0.2, 0.3, 0.2, 0.2, 0.2], [[.05, .07, .03, .03], [.05, .04, .04], [.04, 0.05], [0.01]])
+sim = Simulator(50, [0.2, 0.3, 0.2, 0.2, 0.2], [[.05, .07, .03, .03], [.05, .04, .04], [.04, 0.05], [0.01]])
