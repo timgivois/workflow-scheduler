@@ -114,5 +114,3 @@ class Simulator:
         for i in range(1, self.size-1):
             self.weights.append(randint(MIN_INSTRUCTIONS, MAX_INSTRUCTIONS))
         self.weights.append(0)
-
-sim = Simulator(50, [0.2, 0.3, 0.2, 0.2, 0.2], [[.05, .07, .03, .03], [.05, .04, .04], [.04, 0.05], [0.01]])
