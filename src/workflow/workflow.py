@@ -26,6 +26,10 @@ class Workflow:
         for node, depth in self.depth_per_node.items():
             self.depth[depth].append(node)
 
+        self.routes_t = {}
+
+        self.find_routes(self.size - 1, 0, self.routes_t)
+
     def _add_edge(self, source, target):
         self.graph.add_edge(self.graph.vertex(source), self.graph.vertex(target))
 
@@ -39,9 +43,18 @@ class Workflow:
         self.accum_weights[actual_node] = max(already_accum_weight, accum_weight+self.weights[actual_node])
 
         for fathers in self.edges['target'][actual_node]:
-            self.find_weights(fathers, self.accum_weights[actual_node])
+            self.find_accum_weights(fathers, self.accum_weights[actual_node])
 
     def find_depth(self, actual_node=0, actual_depth=0):
         self.depth_per_node[actual_node] = max(self.depth_per_node[actual_node], actual_depth)
         for next_node in self.edges['source'][actual_node]:
             self.find_depth(next_node, actual_depth+1)
+
+    def find_routes(self, actual_node, weight=0, routes={}):
+        weight += self.weights[actual_node]
+        if actual_node != 0:
+            routes[actual_node] = {}
+            for fathers in self.edges['target'][actual_node]:
+                self.find_routes(fathers, weight, routes[actual_node])
+        else:
+            routes[actual_node] = weight
