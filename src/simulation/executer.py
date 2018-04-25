@@ -27,7 +27,7 @@ class Executor:
         done_tasks = []
         threads = []
         for task in range(0, workflow.size):
-            threads.append(Thread(target=run_task, args=(task, workflow.weights[task], workflow.edges['target'][task], resources[policy[task]], done_tasks,)))
+            threads.append(Thread(target=run_task, args=(task, workflow.weights[task], workflow.edges['target'][task], policy[task], done_tasks,)))
         for thread in threads:
             thread.start()
 
