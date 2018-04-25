@@ -1,11 +1,10 @@
 from itertools import accumulate
 from math import floor
 from random import choice, sample, randint
+from .config import MAX_INSTRUCTIONS, MIN_INSTRUCTIONS
 
-MAX_INSTRUCTIONS = 1800
-MIN_INSTRUCTIONS = 200
 
-class Simulator:
+class Initial_Simulation:
     def __init__(self, vertex_number, layers_distribution, dependency_distribution):
         self.size = vertex_number
         layers = [1] + [ round((vertex_number-2) * layer_dist) for layer_dist in layers_distribution] + [1]

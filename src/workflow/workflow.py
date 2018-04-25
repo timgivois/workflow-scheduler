@@ -27,8 +27,10 @@ class Workflow:
             self.depth[depth].append(node)
 
         self.routes_t = {}
-
         self.find_routes(self.size - 1, 0, self.routes_t)
+
+        self.routes = []
+        self.transpose_routes(self.size-1, self.routes_t[self.size - 1])
 
     def _add_edge(self, source, target):
         self.graph.add_edge(self.graph.vertex(source), self.graph.vertex(target))
@@ -58,3 +60,16 @@ class Workflow:
                 self.find_routes(fathers, weight, routes[actual_node])
         else:
             routes[actual_node] = weight
+
+    def transpose_routes(self, actual_node, routes, path=[] ):
+        if actual_node != 0:
+            path = path.copy()
+            path.append(actual_node)
+            for child in routes.keys():
+                self.transpose_routes(child, routes[child], path)
+        else:
+
+            self.routes.append({
+                'path': path,
+                'weight': routes
+            })
