@@ -8,15 +8,17 @@ from time import sleep
 from .resource import Resource
 from .config import RESOURCES
 
+
 def run_task(task, instructions, parents, resource, done_tasks):
-    while not(set(parents)<=set(done_tasks)):
+    while not (set(parents) <= set(done_tasks)):
         sleep(1)
     resource.run(instructions)
     done_tasks.append(task)
 
+
 class Executor:
     def init(self):
-        resources = [ Resource(**resource) for resource in RESOURCES ]
+        resources = [Resource(**resource) for resource in RESOURCES]
         # create policy
         return resources
 
@@ -27,7 +29,8 @@ class Executor:
         done_tasks = []
         threads = []
         for task in range(0, workflow.size):
-            threads.append(Thread(target=run_task, args=(task, workflow.weights[task], workflow.edges['target'][task], policy[task], done_tasks,)))
+            threads.append(Thread(target=run_task, args=(
+            task, workflow.weights[task], workflow.edges['target'][task], policy[task], done_tasks,)))
         for thread in threads:
             thread.start()
 

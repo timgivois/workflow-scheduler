@@ -1,5 +1,6 @@
 from threading import Lock
 
+
 class Resource:
     def __init__(self, speed, cost):
         self.speed = speed # instructions per second
@@ -8,7 +9,6 @@ class Resource:
         self.total_cost = 0
         self.total_time = 0
         self.lock = Lock()
-
 
     def run(self, instructions):
         time_execution = instructions / float(self.speed)
