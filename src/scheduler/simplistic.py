@@ -9,10 +9,12 @@ def chunks(l, n):
 
 class Simplistic:
 
-    def order_routes(self, routes):
+    @staticmethod
+    def order_routes(routes):
         return sorted(routes, key=lambda x: x['weight'], reverse=True)
 
-    def order_resources(self, resources):
+    @staticmethod
+    def order_resources(resources):
         return sorted(resources, key=lambda x: x.speed, reverse=True)
 
     def schedule(self, workflow, resources):
@@ -20,7 +22,7 @@ class Simplistic:
         routes = workflow.routes.copy()
         routes = self.order_routes(routes)
 
-        policy = {x: None if x>0 else resources[0] for x in range(0, workflow.size)}
+        policy = {x: None if x > 0 else resources[0] for x in range(0, workflow.size)}
 
         resources = resources.copy()
         resources = self.order_resources(resources)
@@ -36,7 +38,7 @@ class Simplistic:
                 for task in route['path']:
                     if policy[task] is None:
                         policy[task] = resources[i]
-            if i < len(resources) -1:
-                i+=1
+            if i < len(resources) - 1:
+                i += 1
 
         return policy

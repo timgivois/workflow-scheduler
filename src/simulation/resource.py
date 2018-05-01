@@ -3,8 +3,8 @@ from threading import Lock
 
 class Resource:
     def __init__(self, speed, cost):
-        self.speed = speed # instructions per second
-        self.cost = cost # $ per second
+        self.speed = speed  # instructions per second
+        self.cost = cost  # $ per second
         self.is_running = False
         self.total_cost = 0
         self.total_time = 0

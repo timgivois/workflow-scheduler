@@ -19,7 +19,8 @@ class Initial_Simulation:
         self.create_connections()
         self.simulate_weights()
 
-    def layers_adjusted(self, layers, vertex_number):
+    @staticmethod
+    def layers_adjusted(layers, vertex_number):
         sum_layers = sum(layers)
         max_layers = max(layers)
         difference = vertex_number - sum_layers
@@ -47,14 +48,14 @@ class Initial_Simulation:
 
     def add_random_target_edge(self, source, possible_connections):
         finished = False
-        while not (finished):
+        while not finished:
             target = choice(list(set(possible_connections) - set(self.edges['source'].get(source, []))))
             finished = self.add_edge_if_possible(source, target)
         return finished
 
     def add_random_source_edge(self, target, possible_connections):
         finished = False
-        while not (finished):
+        while not finished:
             source = choice(list(set(possible_connections) - set(self.edges['target'].get(target, []))))
             finished = self.add_edge_if_possible(source, target)
         return finished

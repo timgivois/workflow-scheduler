@@ -1,19 +1,19 @@
 RESOURCES = [
     {
         "speed": 10,
-        "cost": 0.02
+        "cost": 0.1
     },
     {
         "speed": 15,
-        "cost": 0.03
+        "cost": 0.18
     },
     {
         "speed": 30,
-        "cost": 0.05
+        "cost": 0.31
     },
     {
         "speed": 50,
-        "cost": 0.09
+        "cost": 0.6
     }
 ]
 
