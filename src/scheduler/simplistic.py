@@ -1,3 +1,4 @@
+from .scheduler import Scheduler
 # Simplistic scheduler that maps the best resource to critical path
 
 
@@ -7,7 +8,7 @@ def chunks(l, n):
         yield l[i:i + n]
 
 
-class Simplistic:
+class Simplistic(Scheduler):
 
     @staticmethod
     def order_routes(routes):
@@ -17,14 +18,14 @@ class Simplistic:
     def order_resources(resources):
         return sorted(resources, key=lambda x: x.speed, reverse=True)
 
-    def schedule(self, workflow, resources):
+    def schedule(self):
+        routes = self.workflow.routes.copy()
 
-        routes = workflow.routes.copy()
         routes = self.order_routes(routes)
 
-        policy = {x: None if x > 0 else resources[0] for x in range(0, workflow.size)}
+        policy = {x: None if x > 0 else self.resources[0] for x in range(0, self.workflow.size)}
 
-        resources = resources.copy()
+        resources = self.resources.copy()
         resources = self.order_resources(resources)
         resources_size = len(resources)
 
@@ -41,4 +42,4 @@ class Simplistic:
             if i < len(resources) - 1:
                 i += 1
 
-        return policy
+        self.policy = policy

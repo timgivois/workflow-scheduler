@@ -5,26 +5,22 @@ policy = {
 """
 from threading import Thread
 from time import sleep
-from .resource import Resource
-from .config import RESOURCES
 
 
 def run_task(task, instructions, parents, resource, done_tasks):
     while not (set(parents) <= set(done_tasks)):
-        sleep(1)
+        sleep(.1)
     resource.run(instructions)
     done_tasks.append(task)
 
 
 class Executor:
-    def init(self):
-        resources = [Resource(**resource) for resource in RESOURCES]
-        # create policy
-        return resources
-
     def run(self, workflow, resources, policy):
         total_cost = 0
         total_time = 0
+        for resource in resources:
+            resource.total_cost = 0
+            resource.total_time = 0
 
         done_tasks = []
         threads = []
@@ -41,5 +37,4 @@ class Executor:
             total_cost += resource.total_cost
             total_time += resource.total_time
 
-        print('Total time {0}'.format(total_time))
-        print('Total Cost {0}'.format(total_cost))
+        return total_time, total_cost
