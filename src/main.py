@@ -3,6 +3,7 @@ from workflow.workflow import Workflow
 from scheduler.simplistic import Simplistic
 from scheduler.random import Random
 from scheduler.extreme import MaxResource, MinResource
+from scheduler.genetic_algorithm import GeneticScheduler
 
 
 def run_scheduler(scheduler):
@@ -24,14 +25,18 @@ minResource = MinResource(0, 0, workflow)
 print('\nMin Resource')
 run_scheduler(minResource)
 
-
+genetic = GeneticScheduler(0, 0, workflow)
+print('\nGenetic')
+run_scheduler(genetic)
+'''
 time_asked = input('Time: ')
 cost_asked = input('Cost: ')
 
-simplistic = Simplistic(time_asked, cost_asked, workflow)
+simplistic = Simplistic(time_asked, cost_asked, workflow) # First approach
 print('\n\nSimple scheduling')
 run_scheduler(simplistic)
 
 random = Random(time_asked, cost_asked, workflow)
 print('\n\nRandom scheduling')
 run_scheduler(random)
+'''
