@@ -1,4 +1,6 @@
 from .scheduler import Scheduler
+import numpy as np
+
 # Simplistic scheduler that maps the best resource to critical path
 
 
@@ -34,12 +36,15 @@ class Simplistic(Scheduler):
         divide = round(routes_len / resources_size)
 
         i = 0
+        tasks_per_chunk = {x: [] for x in range(0, self.workflow.size)}
         for chunk in chunks(routes, divide):
             for route in chunk:
                 for task in route['path']:
-                    if policy[task] is None:
-                        policy[task] = resources[i]
+                    tasks_per_chunk[task].append(i)
             if i < len(resources) - 1:
                 i += 1
+
+        for task in list(tasks_per_chunk.keys())[1:]:
+            policy[task] = self.resources[np.bincount(tasks_per_chunk[task]).argmax()]
 
         self.policy = policy
