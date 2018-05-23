@@ -34,14 +34,7 @@ print('\nGenetic')
 
 run_scheduler(genetic)
 
-#time_asked = input('Time: ')
-#cost_asked = input('Cost: ')
-
 simplistic = Simplistic(0, 0, workflow) # First approach
 print('\n\nSimple scheduling')
 
 run_scheduler(simplistic)
-
-#random = Random(time_asked, cost_asked, workflow)
-#print('\n\nRandom scheduling')
-#run_scheduler(random)
