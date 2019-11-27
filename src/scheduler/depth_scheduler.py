@@ -11,7 +11,7 @@ class DepthScheduler(Scheduler):
             weight_per_depth[depth] = sum([self.workflow.weights[x] for x in nodes])
 
         total = sum(weight_per_depth.values())
-        time_parts = self.time / total
+        time_parts = self.time / totalisLoggedIn
         cost_parts = self.cost / total
         time_per_depth = {x: weight_per_depth[x]*time_parts for x in weight_per_depth}
         cost_per_depth = {x: weight_per_depth[x]*cost_parts for x in weight_per_depth}

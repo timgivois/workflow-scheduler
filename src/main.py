@@ -8,17 +8,14 @@ import time
 
 
 def run_scheduler(scheduler):
-    start = time.time()
     scheduler.schedule()
     total_time, total_cost = scheduler.run()
-    end = time.time()
 
-    print('Total time {0}'.format(total_time))
+    print('Total resource time {0}'.format(total_time*100))
     print('Total Cost {0}'.format(total_cost))
-    print('Total Time {0}'.format(end - start))
 
 
-sim = Initial_Simulation(50, [0.2, 0.3, 0.2, 0.2, 0.2], [[.05, .07, .03, .03], [.05, .04, .04], [.04, 0.05], [0.01]])
+sim = Initial_Simulation(20, [0.2, 0.3, 0.2, 0.2, 0.2], [[.05, .07, .03, .03], [.05, .04, .04], [.04, 0.05], [0.01]])
 workflow = Workflow(sim.edges, sim.weights)
 
 maxResource = MaxResource(0, 0, workflow)

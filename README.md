@@ -12,7 +12,7 @@ docker run -v <path-to-repo>:/home/user -u root -ti tiagopeixoto/graph-tool bash
 ```
 3. Navigate to the specified folder and then install the dependencies:
 ```
-apt-get install python-pip
+pacman -S python-pip
 pip install -r requirements.txt
 ```
 4. Run the project with:

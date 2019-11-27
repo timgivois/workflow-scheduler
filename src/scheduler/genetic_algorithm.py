@@ -1,7 +1,9 @@
 from numpy import random
+import numpy
 from deap import base, creator
 from deap import tools
 from deap import algorithms
+import time
 
 from .scheduler import Scheduler
 from simulation.executor import Executor
@@ -10,7 +12,7 @@ from simulation.config import RESOURCES
 from .extreme import MaxResource, MinResource
 
 
-NUM_GEN = 1500
+NUM_GEN = 20
 
 
 class GeneticScheduler(Scheduler):
@@ -25,7 +27,7 @@ class GeneticScheduler(Scheduler):
         toolbox = base.Toolbox()
         IND_SIZE = self.workflow.size
 
-        creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+        creator.create("FitnessMin", base.Fitness, weights=(-1.0,-1.0))
         creator.create("Individual", list, fitness=creator.FitnessMin)
 
         toolbox.register("attribute", random.randint, 0, len(self.resources))
@@ -33,9 +35,15 @@ class GeneticScheduler(Scheduler):
                          toolbox.attribute, n=IND_SIZE)
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
         toolbox.register("mate", tools.cxTwoPoint)
-        toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.1)
-        toolbox.register("select", tools.selTournament, tournsize=3)
+        toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.2)
+        toolbox.register("select", tools.selNSGA2)
 
+        stats = tools.Statistics(lambda ind: ind.fitness.values)
+        stats.register("avg", numpy.mean, axis=0)
+        stats.register("std", numpy.std, axis=0)
+        stats.register("min", numpy.min, axis=0)
+        stats.register("max", numpy.max, axis=0)
+        hof = tools.ParetoFront()
         workflow = self.workflow
 
         def feasible(individual):
@@ -53,13 +61,13 @@ class GeneticScheduler(Scheduler):
 
             total_time, total_cost = executor.run(workflow, available_resources, policy)
 
-            return (total_cost - min_cost) / (max_cost - min_cost) + (total_time - min_time) / (max_time - min_time),
+            return (total_cost - min_cost) / (max_cost - min_cost), (total_time - min_time) / (max_time - min_time)
 
         toolbox.register("evaluate", evaluate)
         toolbox.decorate("evaluate", tools.DeltaPenalty(feasible, 10000))
 
         pop = toolbox.population(n=50)
-        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, ngen=NUM_GEN, verbose=False)
+        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, halloffame=hof, ngen=NUM_GEN, stats=stats, verbose=True)
 
         pop.sort(key=lambda x: x.fitness.values)
-        self.policy = {i: self.resources[int(pop[0][i])] for i in range(0, workflow.size)}
+        self.policy = {i: self.resources[int(hof[0][i])] for i in range(0, workflow.size)}
