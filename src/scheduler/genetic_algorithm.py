@@ -12,7 +12,7 @@ from simulation.config import RESOURCES
 from .extreme import MaxResource, MinResource
 
 
-NUM_GEN = 100
+NUM_GEN = 1000
 
 
 class GeneticScheduler(Scheduler):
