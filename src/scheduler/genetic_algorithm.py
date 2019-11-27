@@ -12,7 +12,7 @@ from simulation.config import RESOURCES
 from .extreme import MaxResource, MinResource
 
 
-NUM_GEN = 20
+NUM_GEN = 100
 
 
 class GeneticScheduler(Scheduler):
@@ -35,8 +35,8 @@ class GeneticScheduler(Scheduler):
                          toolbox.attribute, n=IND_SIZE)
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
         toolbox.register("mate", tools.cxTwoPoint)
-        toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.2)
-        toolbox.register("select", tools.selNSGA2)
+        toolbox.register("mutate", tools.mutUniformInt, up=len(self.resources)-1, low=1, indpb=0.1)
+        toolbox.register("select", tools.selRandom)
 
         stats = tools.Statistics(lambda ind: ind.fitness.values)
         stats.register("avg", numpy.mean, axis=0)

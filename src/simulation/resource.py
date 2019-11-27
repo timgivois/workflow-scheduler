@@ -11,16 +11,18 @@ class Resource:
         self.total_time = 0
         self.lock = Lock()
 
-    def run(self, instructions):
+    def run(self, instructions): # for unlimited resources
         time_execution = instructions / float(self.speed)
         cost_execution = time_execution * self.cost
+
+        sleep(time_execution /100)
 
         self.lock.acquire()
         self.total_cost += cost_execution
         self.total_time += time_execution
         self.lock.release()
 
-    def emulate(self, instructions):
+    def emulate(self, instructions): # using the same resource
         time_execution = instructions / float(self.speed)
         cost_execution = time_execution * self.cost
 

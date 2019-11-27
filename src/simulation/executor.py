@@ -9,7 +9,7 @@ from time import sleep, time
 def run_task(task, instructions, parents, resource, done_tasks):
     while not (set(parents) <= set(done_tasks)):
         sleep(.01)
-    resource.emulate(instructions)
+    resource.run(instructions)
     done_tasks.append(task)
 
 

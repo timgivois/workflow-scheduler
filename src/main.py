@@ -4,6 +4,7 @@ from scheduler.simplistic import Simplistic
 from scheduler.random import Random
 from scheduler.extreme import MaxResource, MinResource
 from scheduler.genetic_algorithm import GeneticScheduler
+from scheduler.depth_scheduler import DepthScheduler
 import time
 
 
@@ -11,7 +12,7 @@ def run_scheduler(scheduler):
     scheduler.schedule()
     total_time, total_cost = scheduler.run()
 
-    print('Total resource time {0}'.format(total_time*100))
+    print('Total time {0}'.format(total_time*100))
     print('Total Cost {0}'.format(total_cost))
 
 
@@ -26,12 +27,16 @@ minResource = MinResource(0, 0, workflow)
 print('\nMin Resource')
 run_scheduler(minResource)
 
-genetic = GeneticScheduler(0, 0, workflow)
-print('\nGenetic')
-
-run_scheduler(genetic)
+# genetic = GeneticScheduler(0, 0, workflow)
+# print('\nGenetic')
+#
+# run_scheduler(genetic)
 
 simplistic = Simplistic(0, 0, workflow) # First approach
 print('\n\nSimple scheduling')
 
 run_scheduler(simplistic)
+
+depthScheduler = DepthScheduler(0, 0, workflow)
+print('\n\nDepth scheduling')
+run_scheduler(depthScheduler)

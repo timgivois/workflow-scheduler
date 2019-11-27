@@ -5,17 +5,17 @@ RESOURCES = [
     },
     {
         "speed": 20,
-        "cost": .23
+        "cost": .18
     },
     {
         "speed": 40,
-        "cost": .45
+        "cost": .35
     },
     {
         "speed": 80,
-        "cost": .90
+        "cost": .60
     }
 ]
 
-MAX_INSTRUCTIONS = 100
+MAX_INSTRUCTIONS = 1800
 MIN_INSTRUCTIONS = 20

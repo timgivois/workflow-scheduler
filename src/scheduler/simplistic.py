@@ -45,6 +45,6 @@ class Simplistic(Scheduler):
                 i += 1
 
         for task in list(tasks_per_chunk.keys())[1:]:
-            policy[task] = self.resources[np.bincount(tasks_per_chunk[task]).argmax()]
+            policy[task] = self.resources[np.bincount(tasks_per_chunk[task]).argmin()]
 
         self.policy = policy
