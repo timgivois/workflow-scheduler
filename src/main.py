@@ -11,13 +11,13 @@ import time
 
 def run_scheduler(scheduler):
     scheduler.schedule()
-    total_time, total_cost = scheduler.run()
+    total_time, total_cost = scheduler.emulate()
 
-    print('Total time {0}'.format(total_time*100))
+    print('Total time {0}'.format(total_time))
     print('Total Cost {0}'.format(total_cost))
 
 
-sim = Initial_Simulation(50, [0.2, 0.3, 0.2, 0.2, 0.2], [[.05, .07, .03, .03], [.05, .04, .04], [.04, 0.05], [0.01]])
+sim = Initial_Simulation(100, [0.4, 0.3, 0.2, 0.1, 0.1], [[.05, .07, .03, .03], [.05, .04, .04], [.04, 0.05], [0.01]])
 workflow = Workflow(sim.edges, sim.weights)
 
 maxResource = MaxResource(0, 0, workflow)
@@ -43,5 +43,5 @@ print('\n\nDepth scheduling')
 run_scheduler(depthScheduler)
 
 simplistic2 = Simplistic2(0, 0, workflow)
-print('\n\nDepth scheduling')
+print('\n\nSimplistic2 scheduling')
 run_scheduler(simplistic2)

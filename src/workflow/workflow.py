@@ -73,3 +73,22 @@ class Workflow:
                 'path': path,
                 'weight': routes
             })
+
+    def find_cycles(self):
+        visited = [ False for _ in range(0, self.size) ]
+
+        return self.find_cycles_helper( 0, [])
+
+    def find_cycles_helper(self, actual_node, rec_list):
+        if actual_node in rec_list:
+            print(rec_list, actual_node)
+            return True
+
+        call_this = []
+        for child in self.edges['source'][actual_node]:
+            new_rec_list = rec_list.copy()
+            new_rec_list.append(actual_node)
+            call_this.append([child, new_rec_list])
+
+
+        return any([self.find_cycles_helper(x[0], x[1]) for x in call_this])

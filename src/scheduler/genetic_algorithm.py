@@ -12,7 +12,7 @@ from simulation.config import RESOURCES
 from .extreme import MaxResource, MinResource
 
 
-NUM_GEN = 1000
+NUM_GEN = 100
 
 
 class GeneticScheduler(Scheduler):
@@ -20,10 +20,10 @@ class GeneticScheduler(Scheduler):
         random.seed(64)
         maxScheduler = MaxResource(0,0, self.workflow)
         maxScheduler.schedule()
-        min_time, max_cost = maxScheduler.run()
+        min_time, max_cost = maxScheduler.emulate()
         minScheduler = MinResource(0,0, self.workflow)
         minScheduler.schedule()
-        max_time, min_cost = minScheduler.run()
+        max_time, min_cost = minScheduler.emulate()
         toolbox = base.Toolbox()
         IND_SIZE = self.workflow.size
 
@@ -35,7 +35,7 @@ class GeneticScheduler(Scheduler):
                          toolbox.attribute, n=IND_SIZE)
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
         toolbox.register("mate", tools.cxTwoPoint)
-        toolbox.register("mutate", tools.mutUniformInt, up=len(self.resources)-1, low=1, indpb=0.1)
+        toolbox.register("mutate", tools.mutUniformInt, up=len(self.resources)-1, low=0, indpb=0.1)
         toolbox.register("select", tools.selRandom)
 
         stats = tools.Statistics(lambda ind: ind.fitness.values)
@@ -59,7 +59,7 @@ class GeneticScheduler(Scheduler):
 
             policy = {i: available_resources[int(ind[i])] for i in range(0, len(ind))}
 
-            total_time, total_cost = executor.run(workflow, available_resources, policy)
+            total_time, total_cost = executor.emulate(workflow, available_resources, policy)
 
             return (total_cost - min_cost) / (max_cost - min_cost), (total_time - min_time) / (max_time - min_time)
 
@@ -67,7 +67,7 @@ class GeneticScheduler(Scheduler):
         toolbox.decorate("evaluate", tools.DeltaPenalty(feasible, 10000))
 
         pop = toolbox.population(n=50)
-        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, halloffame=hof, ngen=NUM_GEN, stats=stats, verbose=True)
+        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, halloffame=hof, ngen=NUM_GEN, stats=stats, verbose=False)
 
         pop.sort(key=lambda x: x.fitness.values)
         self.policy = {i: self.resources[int(hof[0][i])] for i in range(0, workflow.size)}

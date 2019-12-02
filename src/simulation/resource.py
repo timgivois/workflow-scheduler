@@ -26,11 +26,6 @@ class Resource:
         time_execution = instructions / float(self.speed)
         cost_execution = time_execution * self.cost
 
-
-        self.is_running.acquire()
-        sleep(time_execution /100)
-        self.is_running.release()
-
         self.lock.acquire()
         self.total_cost += cost_execution
         self.total_time += time_execution

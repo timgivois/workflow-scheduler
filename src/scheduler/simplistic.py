@@ -12,14 +12,6 @@ def chunks(l, n):
 
 class Simplistic(Scheduler):
 
-    @staticmethod
-    def order_routes(routes):
-        return sorted(routes, key=lambda x: x['weight'], reverse=True)
-
-    @staticmethod
-    def order_resources(resources):
-        return sorted(resources, key=lambda x: x.speed, reverse=True)
-
     def schedule(self):
         routes = self.workflow.routes.copy()
 
