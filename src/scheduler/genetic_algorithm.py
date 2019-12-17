@@ -16,7 +16,7 @@ NUM_GEN = 100
 
 
 class GeneticScheduler(Scheduler):
-    def schedule(self):
+    def schedule(self, plt=None):
         random.seed(64)
         maxScheduler = MaxResource(0,0, self.workflow)
         maxScheduler.schedule()
@@ -53,6 +53,15 @@ class GeneticScheduler(Scheduler):
                     return False
             return True
 
+        def evaluate_without_normalizing(ind):
+            available_resources = [Resource(**resource) for resource in RESOURCES]
+            executor = Executor()
+
+            policy = {i: available_resources[int(ind[i])] for i in range(0, len(ind))}
+
+            return executor.emulate(workflow, available_resources, policy)
+
+
         def evaluate(ind):
             available_resources = [Resource(**resource) for resource in RESOURCES]
             executor = Executor()
@@ -66,8 +75,18 @@ class GeneticScheduler(Scheduler):
         toolbox.register("evaluate", evaluate)
         toolbox.decorate("evaluate", tools.DeltaPenalty(feasible, 10000))
 
+        x = []
+        y = []
         pop = toolbox.population(n=50)
-        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, halloffame=hof, ngen=NUM_GEN, stats=stats, verbose=False)
+        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.2, halloffame=hof, stats=stats, verbose=False, ngen=NUM_GEN)
+        pop.sort(key=lambda x: x.fitness.values)
 
+        for i in range(0, 11):
+            x1, y1, = evaluate_without_normalizing(hof[i])
+            x.append(x1)
+            y.append(y1)
+
+        if plt is not None:
+            plt.scatter(x, y, label='genetic_training', color='lime')
         pop.sort(key=lambda x: x.fitness.values)
         self.policy = {i: self.resources[int(hof[0][i])] for i in range(0, workflow.size)}
